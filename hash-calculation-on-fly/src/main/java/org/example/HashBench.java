@@ -52,7 +52,7 @@ import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode({Mode.Throughput, Mode.AverageTime})
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class MyBenchmark {
+public class HashBench {
 
     @State(Scope.Benchmark)
     public static class BenchmarkState {
@@ -62,7 +62,7 @@ public class MyBenchmark {
         public BenchmarkState() {
             try {
                 FILE_BYTES = Files.readAllBytes(Paths.get(
-                        "/home/work/Videos/Screencasts/Screencast from 2024-11-02 18-25-50.webm"));
+                        "/home/work/Documents/output.file"));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -126,10 +126,12 @@ public class MyBenchmark {
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(MyBenchmark.class.getSimpleName())
+                .include(HashBench.class.getSimpleName())
                 .addProfiler(MemPoolProfiler.class)
                 .addProfiler(GCProfiler.class)
                 .forks(1)
+                .warmupIterations(1)
+                .measurementIterations(1)
                 .resultFormat(ResultFormatType.JSON)
                 .build();
 
